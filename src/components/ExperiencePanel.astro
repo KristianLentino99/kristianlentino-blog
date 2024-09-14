@@ -1,0 +1,200 @@
+---
+import { getExperienceUrlBySlug } from '@utils/url-utils'
+import I18nKey from '../i18n/i18nKey'
+import { i18n } from '../i18n/translation'
+type Experience = {
+  from: Date
+  slug: string
+  to?: Date | null // null means current job
+  job: {
+    title: string
+    company: string | null
+    description: string
+    competences: string[]
+  }
+  onlyStartDate?: boolean
+}
+const { keyword, tags, categories } = Astro.props
+
+let experiences: {
+  year: number
+  jobs: Experience[]
+}[] = [
+  {
+    year: 2018,
+    jobs: [
+      {
+        from: new Date('2018-09-01'),
+        to: new Date('2019-03-31'),
+        slug: 'zucchetti',
+        job: {
+          title: 'Software Engineer',
+          company: 'Zucchetti S.p.A.',
+          description: i18n(I18nKey.experience_description_zucchetti),
+          competences: ['SQL'],
+        },
+      },
+    ],
+  },
+  {
+    year: 2019,
+    jobs: [
+      {
+        from: new Date('2019-03-31'),
+        to: new Date('2022-04-31'),
+        slug: 'dieffetech',
+        job: {
+          title: 'Full Stack Developer',
+          company: 'Dieffetech S.r.l.',
+          description: i18n(I18nKey.experience_description_zucchetti),
+          competences: ['API', 'PHP'],
+        },
+      },
+      {
+        from: new Date('2019-03-31'),
+        onlyStartDate: true,
+        slug: 'zucchetti',
+        job: {
+          title: 'Software Engineer',
+          company: 'Zucchetti S.p.A.',
+          description: i18n(I18nKey.experience_description_zucchetti),
+          competences: ['SQL'],
+        },
+      },
+    ],
+  },
+  {
+    year: 2022,
+    jobs: [
+      {
+        from: new Date('2022-04-31'),
+        to: new Date('2024-05-31'),
+        slug: 'moneyfarm',
+        job: {
+          title: 'Backend Software Engineer',
+          company: 'Moneyfarm',
+          description: i18n(I18nKey.experience_description_moneyfarm),
+          competences: ['Agile', 'Scala', 'Microservices', 'API'],
+        },
+      },
+    ],
+  },
+  {
+    year: 2024,
+    jobs: [
+      {
+        from: new Date('2024-07-01'),
+        to: null,
+        slug: 'commercetools',
+        job: {
+          title: 'Backend Software Engineer',
+          company: 'Commercetools',
+          description: i18n(I18nKey.experience_description_commercetools),
+          competences: ['Distributed Systems', 'GraphQL', 'Event Sourcing'],
+        },
+      },
+      {
+        from: new Date('2024-06-01'),
+        onlyStartDate: true,
+        slug: 'scala-matsuri',
+        job: {
+          title: 'Pursuit of a personal goal',
+          company: null,
+          description: i18n(I18nKey.june_scala_matsuri),
+          competences: ['Public speaking'],
+        },
+      },
+      {
+        from: new Date('2024-05-31'),
+        onlyStartDate: true,
+        slug: 'moneyfarm',
+        job: {
+          title: 'Backend Software Engineer',
+          company: 'Moneyfarm',
+          description: i18n(I18nKey.experience_description_moneyfarm),
+          competences: ['Agile', 'Scala', 'Microservices', 'API'],
+        },
+      },
+    ],
+  },
+].sort((a, b) => b.year - a.year)
+
+if (Array.isArray(tags) && tags.length > 0) {
+  experiences = experiences.filter(experience => {
+    return experience.jobs.some(job =>
+      job.job.competences.some(competence => tags.includes(competence)),
+    )
+  })
+}
+
+function formatDate(date: Date) {
+  const options = { year: 'numeric', month: 'short' } as const
+  return date.toLocaleDateString('en-US', options)
+}
+
+function formatTag(tag: string[]) {
+  return tag.map(t => `#${t}`).join(' ')
+}
+---
+
+<div class="card-base py-4 px-2">
+    {
+        experiences.map(experience => (
+            <div>
+                <div class="flex flex-row w-full items-center h-[3.75rem]">
+                    <div class="w-[15%] md:w-[15%] transition text-2xl font-bold text-right text-75">{experience.year}</div>
+                    <div class="w-[15%] md:w-[20%]">
+                        <div class="h-3 w-3 bg-none rounded-full outline outline-[var(--primary)] mx-auto -outline-offset-[2px] z-50 outline-3"></div>
+                    </div>
+                    <div class="w-[70%] md:w-[70%] transition text-right text-50"></div>
+                </div>
+                {experience.jobs.map(job => (
+                    <a href={getExperienceUrlBySlug(job.slug)}
+                       aria-label={job.job.title}
+                       class="group btn-plain block h-10 w-full rounded-lg hover:text-[initial]"
+                    >
+                        <div class="flex flex-row justify-start items-center h-full">
+                            <div class="w-[15%] md:w-[15%] transition text-sm text-right text-50" >
+                                {formatDate(job.from)} {job.to ? ` - ${formatDate(job.to)}` : !job.onlyStartDate ? '- Present' : ''}
+                            </div>
+                            <div class="w-[15%] md:w-[20%] relative dash-line h-full flex items-center">
+                                <div class="transition-all mx-auto w-1 h-1 rounded group-hover:h-5
+                                bg-[oklch(0.5_0.05_var(--hue))] group-hover:bg-[var(--primary)]
+                                outline outline-4 z-50
+                                outline-[var(--card-bg)]
+                                group-hover:outline-[var(--btn-plain-bg-hover)]
+                                group-active:outline-[var(--btn-plain-bg-active)]
+                                "
+                                ></div>
+                            </div>
+                            <div class="w-[70%] md:max-w-[45%] md:w-[45%] text-left font-bold
+                                group-hover:translate-x-1 transition-all group-hover:text-[var(--primary)]
+                                text-75 pr-8 whitespace-nowrap overflow-ellipsis overflow-hidden"
+                            >
+                                    {job.job.title + (job.job.company ? ` at ${job.job.company}` : '')}
+                            </div> 
+                            <div class="hidden md:block md:w-[25%] text-left text-sm transition
+                            whitespace-nowrap overflow-ellipsis overflow-hidden text-30"
+                            >{formatTag(job.job.competences)}</div>
+                        </div>
+                    </a>
+                ))}
+            </div>
+        ))
+    }
+</div>
+
+<style>
+    @tailwind components;
+    @tailwind utilities;
+
+    @layer components {
+        .dash-line {
+        }
+        .dash-line::before {
+            content: "";
+            @apply w-[10%] h-full absolute -top-1/2 left-[calc(50%_-_1px)] -top-[50%] border-l-[2px]
+            border-dashed pointer-events-none border-[var(--line-color)] transition;
+        }
+    }
+</style>
