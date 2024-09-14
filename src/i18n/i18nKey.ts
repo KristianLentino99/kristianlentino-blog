@@ -19,7 +19,7 @@ enum I18nKey {
   minuteCount = 'minuteCount',
   minutesCount = 'minutesCount',
   postCount = 'postCount',
-  postsCount = 'postsCount',
+  jobsCountInYear = 'jobsCountInYear',
 
   themeColor = 'themeColor',
 
@@ -32,6 +32,13 @@ enum I18nKey {
   author = 'author',
   publishedAt = 'publishedAt',
   license = 'license',
+
+  journey = 'My journey',
+  experience_description_zucchetti = 'experience_description_zucchetti',
+  experience_description_moneyfarm = 'experience_description_moneyfarm',
+  june_scala_matsuri = '2024_june_scala_matsuri',
+  experience_description_commercetools = 'experience_description_commercetools',
+  current_job = 'current_job',
 }
 
 export default I18nKey

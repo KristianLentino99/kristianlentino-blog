@@ -32,6 +32,6 @@ export function getTranslation(lang: string): Translation {
 }
 
 export function i18n(key: I18nKey): string {
-  const lang = siteConfig.lang || 'en'
+  const lang =  'en' //siteConfig.lang ||
   return getTranslation(lang)[key]
 }

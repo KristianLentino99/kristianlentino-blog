@@ -20,7 +20,6 @@
     "formatter": {
       "quoteStyle": "single",
       "jsxQuoteStyle": "single",
-      "trailingComma": "all",
       "semicolons": "asNeeded",
       "arrowParentheses": "asNeeded"
     }

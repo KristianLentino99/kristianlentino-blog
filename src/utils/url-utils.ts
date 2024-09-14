@@ -16,6 +16,10 @@ export function getPostUrlBySlug(slug: string): string {
   return url(`/posts/${slug}/`)
 }
 
+export function getExperienceUrlBySlug(slug: string): string {
+  return url(`/experience/${slug}/`)
+}
+
 export function getCategoryUrl(category: string): string {
   if (category === i18n(i18nKey.uncategorized))
     return url('/archive/category/uncategorized/')
